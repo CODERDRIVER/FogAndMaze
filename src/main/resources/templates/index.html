@@ -100,19 +100,19 @@
                    $data.append("<ul>"+"<li>"+citynow.city+"</li>"+"<li>"+citynow.AQI+"</li>"+"<li>"+citynow.quality+"</li>"+"<li>"+citynow.date+"</li>"
                    +"</ul>");
                     $data.append("<p>lastMoniData</p>")
-                    $data.append("<ul>")
+                    $data.append("<ul id='lastMoniData'>");
                     for(var key in result[0].lastMoniData)
                     {
                         var value = result[0].lastMoniData[key];
-                        $data.append("<li>"+value.city+"</li>");
-                        $data.append("<li>"+value.AQI+"</li>");
-                        $data.append("<li>"+value.quality+"</li>");
-                        $data.append("<li>"+value.date+"</li>");
+                        $("#lastMoniData").append("<li>"+value.city+"</li>");
+                        $("#lastMoniData").append("<li>"+value.AQI+"</li>");
+                        $("#lastMoniData").append("<li>"+value.quality+"</li>");
+                        $("#lastMoniData").append("<li>"+value.date+"</li>");
                     }
-                    $data.append("<p>lastTwoWeeks</p>")
+//                    $data.append("<p>lastTwoWeeks</p>")
                 },
-                error: function() {
-
+                error: function(err) {
+                    console.log(err)
                 }
             });
             getWeather();
