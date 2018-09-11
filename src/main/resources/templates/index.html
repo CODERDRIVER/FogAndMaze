@@ -7,12 +7,10 @@
     <title>Hello, World</title>
     <style type="text/css">
         body{
+            width:100%;
+            height:700px;
             background-image: url("img/bg.png");
-        }
-        #content{
-            height: 600px;
-            width: 800px;
-            margin: 0 auto;
+            background-repeat: no-repeat;
         }
         #pos{
             height: 30px;
@@ -24,9 +22,19 @@
             color: white;
             opacity:0.8;
         }
-        #data{
-            margin-left:200px;
+        .center{
             color: white;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+        }
+        #weather{
+            float: left;
+            margin-left:20%;
+        }
+        #data{
+            float: right;
+            margin-right:10%;
         }
     </style>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=U0lRpYoYfLz3t1fRZZNsXGsiPake6tu7">
@@ -38,18 +46,24 @@
 <body>
     <div id="content">
         <div id="pos"></div>
-        <div id="data"></div>
+        <div class="center">
+            <div id="weather"></div>
+            <div id="data"></div>
+        </div>
     </div>
 
     <script type="text/javascript">
+        var province=null,city=null;
+        cookie = document.cookie;
         window.onload = function() {
             var geolocation = new BMap.Geolocation();
-            var city;
-            cookie = document.cookie;
             //判断浏览器是否有缓存，如果有的话，直接从缓存中拿
             if (cookie!=null&&cookie!="")
             {
                 $("#pos").html(cookie.split("=")[1]);
+                position = cookie.split("=")[1].split(",");
+                province = position[0].substr(0,2);
+                city = position[1].trim().substr(0,2);
             }else{
                 geolocation.getCurrentPosition(function(r) {
                     if (this.getStatus() == BMAP_STATUS_SUCCESS) {
@@ -60,6 +74,8 @@
                             var addComp = rs.addressComponents;
                             var pos = addComp.province + ", " + addComp.city + ", " + addComp.district;
                             document.cookie="pos="+pos;
+                            province = addComp.province.substr(0,2);
+                            city = addComp.city.substr(0,2);
                             document.getElementById("pos").innerHTML = addComp.province + ", " + addComp.city + ", " + addComp.district;
                         });
                     } else {
@@ -67,11 +83,12 @@
                     }
                 });
             }
+//            请求空气质量信息
             $.ajax({
                 type: "GET",
                 url: "http://localhost:8080/urbanAirQuality",
                 data: {
-                    "city": "西安"
+                    "city": city
                 },
                 dataType: "json",
                 success: function(data) {
@@ -80,13 +97,8 @@
                    console.log(result);
                    var citynow = result[0].citynow;
                    $data.append("<p>citynow</p>")
-                   $data.append("<ul>");
-                   $data.append("<li>"+citynow.city+"</li>");
-                   $data.append("<li>"+citynow.AQI+"</li>");
-                   $data.append("<li>"+citynow.quality+"</li>");
-                   $data.append("<li>"+citynow.date+"</li>");
-                   $data.append("</ul>")
-
+                   $data.append("<ul>"+"<li>"+citynow.city+"</li>"+"<li>"+citynow.AQI+"</li>"+"<li>"+citynow.quality+"</li>"+"<li>"+citynow.date+"</li>"
+                   +"</ul>");
                     $data.append("<p>lastMoniData</p>")
                     $data.append("<ul>")
                     for(var key in result[0].lastMoniData)
@@ -97,14 +109,82 @@
                         $data.append("<li>"+value.quality+"</li>");
                         $data.append("<li>"+value.date+"</li>");
                     }
-                    $data.append("</ul>")
                     $data.append("<p>lastTwoWeeks</p>")
                 },
                 error: function() {
 
                 }
             });
+            getWeather();
+//
         };
+        function getWeather()
+        {
+           // 获得当前日期
+            var date = new Date().toLocaleDateString();
+            year = date.split("/")[0];
+            month = date.split("/")[1];
+            days = date.split("/")[2];
+            var seprate = "-"
+//            补零操作
+            if(month>=1&&month<=9)
+            {
+                month = "0"+month;
+            }
+            days = days -1;
+            if(days>=1&&days<=9)
+            {
+                days = "0"+days;
+            }
+            var weather = year+seprate+month+seprate+days;
+//            请求天气信息
+            $.ajax({
+                type:"GET",
+                url:"weather",
+                data: {
+                    "province_name": province,
+                    "city_name": city,
+                    "weather_date": weather
+                },
+                dataType:"json",
+                success:function(data){
+                    console.log(data);
+                    /**
+                     * {
+                        "reason": "查询成功",
+                        "result": {
+                            "city_id": "1810",
+                            "city_name": "西安",
+                            "weather_date": "2017-07-15",
+                            "day_weather": "小雨",
+                            "night_weather": "晴",
+                            "day_temp": "38℃",
+                            "night_temp": "26℃",
+                            "day_wind": "东风",
+                            "day_wind_comp": "3-4级",
+                            "night_wind": "东北风",
+                            "night_wind_comp": "≤3级",
+                            "day_weather_id": "07",
+                            "night_weather_id": "00"
+                        },
+                        "error_code": 0
+}
+                     */
+                    result = data.result;
+                    $("#weather").append("<ul>");
+                    for(key in result)
+                    {
+                        $("#weather").append("<li>"+key+" : "+result[key]+"</li>")
+                    }
+                    $("#weather").append("</ul>");
+                },
+                error:function(error){
+                    console.log(error);
+                }
+
+            });
+
+        }
     </script>
 
 </body>
