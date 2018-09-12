@@ -45,13 +45,14 @@ public class JuHeController {
     @RequestMapping(value = "/weather",method = RequestMethod.GET)
     public JSONObject getWeather(@RequestParam(value = "province_name")String provinceName,@RequestParam(value = "city_name")String cityName,@RequestParam("weather_date") String weatherDate)
     {
-        String provinceId = juHeService.getProvinceIdByProvinceName(provinceName);
-        String cityIdByProvinceIdAndCityName = juHeService.getCityIdByProvinceIdAndCityName(provinceId, cityName);
-        if (cityIdByProvinceIdAndCityName==null)
-        {
-            //没有要查询的城市
-        }
-        JSONObject weather = juHeService.getWeather(cityIdByProvinceIdAndCityName, weatherDate);
+//        String provinceId = juHeService.getProvinceIdByProvinceName(provinceName);
+//        String cityIdByProvinceIdAndCityName = juHeService.getCityIdByProvinceIdAndCityName(provinceId, cityName);
+//        if (cityIdByProvinceIdAndCityName==null)
+//        {
+//            //没有要查询的城市
+//        }
+//        JSONObject weather = juHeService.getWeather(cityIdByProvinceIdAndCityName, weatherDate);
+        JSONObject weather = JSONObject.fromObject("{\"reason\":\"查询成功\",\"result\":{\"city_id\":\"1810\",\"city_name\":\"西安\",\"weather_date\":\"2018-09-11\",\"day_weather\":\"晴\",\"night_weather\":\"阴\",\"day_temp\":\"30℃\",\"night_temp\":\"20℃\",\"day_wind\":\"西北风\",\"day_wind_comp\":\"<3级\",\"night_wind\":\"东南风\",\"night_wind_comp\":\"<3级\",\"day_weather_id\":\"00\",\"night_weather_id\":\"02\"},\"error_code\":0}\n");
         System.out.println(weather);
         return weather;
     }
@@ -62,8 +63,23 @@ public class JuHeController {
     @RequestMapping(value = "/cityid",method = RequestMethod.GET)
     public String getCityIDFromCityName(@RequestParam(value = "city_name") String cityName)
     {
-        String provinceId = juHeService.getProvinceIdByProvinceName(cityName);
+        //String provinceId = juHeService.getProvinceIdByProvinceName(cityName);
+        String provinceId = "{\"reason\":\"查询成功\",\"result\":{\"city_id\":\"1810\",\"city_name\":\"西安\",\"weather_date\":\"2018-09-11\",\"day_weather\":\"晴\",\"night_weather\":\"阴\",\"day_temp\":\"30℃\",\"night_temp\":\"20℃\",\"day_wind\":\"西北风\",\"day_wind_comp\":\"<3级\",\"night_wind\":\"东南风\",\"night_wind_comp\":\"<3级\",\"day_weather_id\":\"00\",\"night_weather_id\":\"02\"},\"error_code\":0}\n";
+        System.out.println(provinceId);
         return provinceId;
+    }
+
+    /**
+     * 根据城市名称获得全国天气预报
+     * http://v.juhe.cn/weather/index?format=2&cityname=%E8%8B%8F%E5%B7%9E&key=您申请的KEY
+     */
+    @RequestMapping(value = "/weather/city",method = RequestMethod.GET)
+    public JSONObject getWeatherByCityName(@RequestParam(value = "city_name") String cityName)
+    {
+//        JSONObject weatherByCityName = juHeService.getWeatherByCityName(cityName);
+        JSONObject weatherByCityName = JSONObject.fromObject("{\"resultcode\":\"200\",\"reason\":\"successed!\",\"result\":{\"sk\":{\"temp\":\"22\",\"wind_direction\":\"东风\",\"wind_strength\":\"2级\",\"humidity\":\"61%\",\"time\":\"21:03\"},\"today\":{\"temperature\":\"20℃~29℃\",\"weather\":\"多云转阴\",\"weather_id\":{\"fa\":\"01\",\"fb\":\"02\"},\"wind\":\"东南风3-5级\",\"week\":\"星期三\",\"city\":\"西安\",\"date_y\":\"2018年09月12日\",\"dressing_index\":\"热\",\"dressing_advice\":\"天气热，建议着短裙、短裤、短薄外套、T恤等夏季服装。\",\"uv_index\":\"弱\",\"comfort_index\":\"\",\"wash_index\":\"较适宜\",\"travel_index\":\"适宜\",\"exercise_index\":\"适宜\",\"drying_index\":\"\"},\"future\":[{\"temperature\":\"20℃~29℃\",\"weather\":\"多云转阴\",\"weather_id\":{\"fa\":\"01\",\"fb\":\"02\"},\"wind\":\"东南风3-5级\",\"week\":\"星期三\",\"date\":\"20180912\"},{\"temperature\":\"18℃~27℃\",\"weather\":\"阴转阵雨\",\"weather_id\":{\"fa\":\"02\",\"fb\":\"03\"},\"wind\":\"东北风微风\",\"week\":\"星期四\",\"date\":\"20180913\"},{\"temperature\":\"17℃~26℃\",\"weather\":\"多云转阵雨\",\"weather_id\":{\"fa\":\"01\",\"fb\":\"03\"},\"wind\":\"东北风微风\",\"week\":\"星期五\",\"date\":\"20180914\"},{\"temperature\":\"15℃~19℃\",\"weather\":\"小雨\",\"weather_id\":{\"fa\":\"07\",\"fb\":\"07\"},\"wind\":\"西南风3-5级\",\"week\":\"星期六\",\"date\":\"20180915\"},{\"temperature\":\"15℃~21℃\",\"weather\":\"阴转小雨\",\"weather_id\":{\"fa\":\"02\",\"fb\":\"07\"},\"wind\":\"东北风微风\",\"week\":\"星期日\",\"date\":\"20180916\"},{\"temperature\":\"17℃~26℃\",\"weather\":\"多云转阵雨\",\"weather_id\":{\"fa\":\"01\",\"fb\":\"03\"},\"wind\":\"东北风微风\",\"week\":\"星期一\",\"date\":\"20180917\"},{\"temperature\":\"15℃~19℃\",\"weather\":\"小雨\",\"weather_id\":{\"fa\":\"07\",\"fb\":\"07\"},\"wind\":\"西南风3-5级\",\"week\":\"星期二\",\"date\":\"20180918\"}]},\"error_code\":0}\n");
+        System.out.println(weatherByCityName);
+        return weatherByCityName;
     }
 
 }

@@ -25,10 +25,20 @@ public interface JuHeService {
      */
     public String getProvinceIdByProvinceName(String provinceName);
     /**
+     * 历史天气
      * http://v.juhe.cn/historyWeather/citys
      * 根据城市名称和省份id查询城市id
      * city_name
      * province_id
      */
     public String getCityIdByProvinceIdAndCityName(String provinceId,String cityName);
+
+    /**
+     * http://v.juhe.cn/weather/index
+     * 全国天气预报
+     * http://v.juhe.cn/weather/index?format=2&cityname=%E8%8B%8F%E5%B7%9E&key=您申请的KEY
+     * 根据城市名称查询天气预报
+     */
+    public JSONObject getWeatherByCityName(String cityName);
+
 }

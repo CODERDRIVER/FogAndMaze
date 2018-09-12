@@ -29,6 +29,8 @@ public class JuHeServiceImpl implements JuHeService {
     //天气情况质量
     public static final String WEATHER_KEY = "a9b9234b8989dec225425d5964425f08";
 
+    public static final String WEATHER_FOREST = "19b73e5deff2c52c13be90450c5cddbe";
+
     /**
      * 获取空气质量
      * @return
@@ -165,5 +167,31 @@ public class JuHeServiceImpl implements JuHeService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * 根据城市名称查询天气预报
+     * http://v.juhe.cn/weather/index?format=2&cityname=%E8%8B%8F%E5%B7%9E&key=您申请的KEY
+     * @param cityName
+     * @return
+     */
+    @Override
+    public JSONObject getWeatherByCityName(String cityName) {
+        String url = "http://v.juhe.cn/weather/index";
+        Map<String,String> params = new HashMap<String,String>();
+        params.put("format","2");
+        params.put("cityname",cityName);
+        params.put("key",WEATHER_FOREST);
+        JSONObject jsonObject = null;
+        try{
+            String get = URLUtil.net(url, params, "GET");
+            jsonObject = JSONObject.fromObject(get);
+            return jsonObject;
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

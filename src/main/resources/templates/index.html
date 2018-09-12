@@ -15,12 +15,52 @@
         #pos{
             height: 30px;
             width: 200px;
-            margin: 0 auto;
+            margin: 20px auto;
             text-align: center;
             border:1px white solid;
-            border-radius: 5px;
+            border-radius: 15px;
             color: white;
-            opacity:0.8;
+            font-weight: bold;
+            background: rgba(0, 0, 0, .3);
+        }
+        #weather_forest{
+            width:499px;
+            height:393px;
+            margin:0 auto;
+        }
+        #weather_forest .up{
+            width: 496px;
+            height:55px;
+            background: #000;
+        }
+        #weather_forest .up p{
+            padding-top: 10px;
+            padding-left: 10px;
+            color: white;
+            font-weight:bold;
+        }
+        #weather_forest .up p span{
+            margin-left: 20px;
+            color: darkgrey;
+        }
+        #weather_forest .down{
+            margin-top: -20px;
+            width:496px;
+            height: 338px;
+            background: rgba(0, 0, 0, .3);
+            color: white;
+            font-weight: bold;
+        }
+        #weather_forest .down ul{
+            padding-top: 10px;
+        }
+        #weather_forest .down ul li{
+            list-style: none;
+            /*display: inline;*/
+            text-align: center;
+        }
+        #weather_forest .down ul li ul li{
+            margin-top: 8px;
         }
         .center{
             color: white;
@@ -46,6 +86,70 @@
 <body>
     <div id="content">
         <div id="pos"></div>
+        <div id="weather_forest">
+            <div class="up">
+                <p>09月12    <span>农历 八月初三</span></p>
+            </div>
+            <div class="down">
+                <ul>
+                    <li style="float: left">
+                        <ul>
+                            <li><span>昨天</span></li>
+                            <li><span>09/11</span></li>
+                            <li><span>27℃</span></li><br>
+                            <li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>
+                            <li><span>多云</span></li><br>
+                            <li><span>南风</span></li><br>
+                            <li><span>良</span></li>
+                        </ul>
+                    </li>
+                    <li style="float: left">
+                        <ul>
+                            <li><span>今天</span></li>
+                            <li><span>09/12</span></li>
+                            <li><span>27℃</span></li><br>
+                            <li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>
+                            <li><span>多云</span></li><br>
+                            <li><span>南风</span></li><br>
+                            <li><span>良</span></li>
+                        </ul>
+                    </li>
+                    <li style="float: left">
+                        <ul>
+                            <li><span>明天</span></li>
+                            <li><span>09/13</span></li>
+                            <li><span>27℃</span></li><br>
+                            <li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>
+                            <li><span>多云</span></li><br>
+                            <li><span>南风</span></li><br>
+                            <li><span>良</span></li>
+                        </ul>
+                    </li>
+                    <li style="float: left">
+                        <ul>
+                            <li><span>周六</span></li>
+                            <li><span>09/14</span></li>
+                            <li><span>27℃</span></li><br>
+                            <li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>
+                            <li><span>多云</span></li><br>
+                            <li><span>南风</span></li><br>
+                            <li><span>良</span></li>
+                        </ul>
+                    </li>
+                    <li style="float: left">
+                        <ul>
+                            <li><span>周日</span></li>
+                            <li><span>09/15</span></li>
+                            <li><span>27℃</span></li><br>
+                            <li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>
+                            <li><span>多云</span></li><br>
+                            <li><span>南风</span></li><br>
+                            <li><span>良</span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div class="center">
             <div id="weather"></div>
             <div id="data"></div>
@@ -83,7 +187,13 @@
                     }
                 });
             }
-//            请求空气质量信息
+//            getUrbanAirQuality();
+//            getWeather();
+            weather_forest();
+//
+        };
+        function getUrbanAirQuality(){
+            //            请求空气质量信息
             $.ajax({
                 type: "GET",
                 url: "http://localhost:8080/urbanAirQuality",
@@ -92,13 +202,13 @@
                 },
                 dataType: "json",
                 success: function(data) {
-                   var $data =  $("#data");
-                   var result = data.result;
-                   console.log(result);
-                   var citynow = result[0].citynow;
-                   $data.append("<p>citynow</p>")
-                   $data.append("<ul>"+"<li>"+citynow.city+"</li>"+"<li>"+citynow.AQI+"</li>"+"<li>"+citynow.quality+"</li>"+"<li>"+citynow.date+"</li>"
-                   +"</ul>");
+                    var $data =  $("#data");
+                    var result = data.result;
+                    console.log(result);
+                    var citynow = result[0].citynow;
+                    $data.append("<p>citynow</p>")
+                    $data.append("<ul>"+"<li>"+citynow.city+"</li>"+"<li>"+citynow.AQI+"</li>"+"<li>"+citynow.quality+"</li>"+"<li>"+citynow.date+"</li>"
+                        +"</ul>");
                     $data.append("<p>lastMoniData</p>")
                     $data.append("<ul id='lastMoniData'>");
                     for(var key in result[0].lastMoniData)
@@ -115,8 +225,6 @@
                     console.log(err)
                 }
             });
-            getWeather();
-//
         };
         function getWeather()
         {
@@ -184,6 +292,36 @@
 
             });
 
+        }
+
+        /**
+         *  获取某个城市的天气预报
+         *  返回参数
+         *  "resultcode": "200",
+         "reason": "查询成功!",
+         "result": {}
+         "error_code": 0
+         */
+        function weather_forest(){
+            $.ajax({
+                url:"http://localhost:8080/weather/city",
+                type:"GET",
+                data:{
+                    "city_name":city
+                },
+                dataType:"json",
+                success:function(data){
+                    var result = data["result"];
+                    var sk = result['sk'];
+                    var today = result['today'];
+                    var future = result['future'];
+                    console.log(today);
+                },
+                error:function(error){
+                    console.log(error);
+                }
+
+            });
         }
     </script>
 
