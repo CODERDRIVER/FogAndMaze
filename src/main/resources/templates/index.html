@@ -23,6 +23,19 @@
             font-weight: bold;
             background: rgba(0, 0, 0, .3);
         }
+        #pos:hover{
+            cursor: hand;
+            color: orange;
+        }
+
+        #sk{
+            float: left;
+            margin-left: 8%;
+        }
+        #sk p{
+            color: white;
+            line-height: 10px;
+        }
         #weather_forest{
             width:499px;
             height:393px;
@@ -53,6 +66,7 @@
         }
         #weather_forest .down ul{
             padding-top: 10px;
+            margin-left: -35px;
         }
         #weather_forest .down ul li{
             list-style: none;
@@ -60,7 +74,7 @@
             text-align: center;
         }
         #weather_forest .down ul li ul li{
-            margin-top: 8px;
+            margin-top: 30px;
         }
         .center{
             color: white;
@@ -81,84 +95,104 @@
     </script>
     <script type="text/javascript" src="jquery-3.2.1.min.js">
     </script>
+    <script type="text/javascript" src="Chart.js">
+    </script>
+
 </head>
 
 <body>
     <div id="content">
         <div id="pos"></div>
-        <div id="weather_forest">
+        <!--sk": {	/*当前实况天气*/
+            "temp": "21",	/*当前温度*/
+            "wind_direction": "西风",	/*当前风向*/
+            "wind_strength": "2级",	/*当前风力*/
+            "humidity": "4%",	/*当前湿度*/
+            "time": "14:25"	/*更新时间*/
+        },-->
+        <div id="sk">
+        </div>
+        <div style="float:right;margin-right:100px;width: 400px;height: 800px">
+            <canvas id="myChart" width="400" height="450"></canvas>
+        </div>
+        <div id="weather_forest" style="display: none">
             <div class="up">
                 <p>09月12    <span>农历 八月初三</span></p>
             </div>
             <div class="down">
-                <ul>
-                    <li style="float: left">
-                        <ul>
-                            <li><span>昨天</span></li>
-                            <li><span>09/11</span></li>
-                            <li><span>27℃</span></li><br>
-                            <li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>
-                            <li><span>多云</span></li><br>
-                            <li><span>南风</span></li><br>
-                            <li><span>良</span></li>
-                        </ul>
-                    </li>
-                    <li style="float: left">
-                        <ul>
-                            <li><span>今天</span></li>
-                            <li><span>09/12</span></li>
-                            <li><span>27℃</span></li><br>
-                            <li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>
-                            <li><span>多云</span></li><br>
-                            <li><span>南风</span></li><br>
-                            <li><span>良</span></li>
-                        </ul>
-                    </li>
-                    <li style="float: left">
-                        <ul>
-                            <li><span>明天</span></li>
-                            <li><span>09/13</span></li>
-                            <li><span>27℃</span></li><br>
-                            <li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>
-                            <li><span>多云</span></li><br>
-                            <li><span>南风</span></li><br>
-                            <li><span>良</span></li>
-                        </ul>
-                    </li>
-                    <li style="float: left">
-                        <ul>
-                            <li><span>周六</span></li>
-                            <li><span>09/14</span></li>
-                            <li><span>27℃</span></li><br>
-                            <li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>
-                            <li><span>多云</span></li><br>
-                            <li><span>南风</span></li><br>
-                            <li><span>良</span></li>
-                        </ul>
-                    </li>
-                    <li style="float: left">
-                        <ul>
-                            <li><span>周日</span></li>
-                            <li><span>09/15</span></li>
-                            <li><span>27℃</span></li><br>
-                            <li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>
-                            <li><span>多云</span></li><br>
-                            <li><span>南风</span></li><br>
-                            <li><span>良</span></li>
-                        </ul>
-                    </li>
+                <ul class="down_ul">
+                    <!--<li style="float: left">-->
+                        <!--<ul>-->
+                            <!--<li><span>昨天</span></li>-->
+                            <!--<li><span>09/11</span></li>-->
+                            <!--<li><span>27℃</span></li><br>-->
+                            <!--<li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>-->
+                            <!--<li><span>多云</span></li><br>-->
+                            <!--<li><span>南风</span></li><br>-->
+                            <!--<li><span>良</span></li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
+                    <!--<li style="float: left">-->
+                        <!--<ul>-->
+                            <!--<li><span>今天</span></li>-->
+                            <!--<li><span>09/12</span></li>-->
+                            <!--<li><span>27℃</span></li><br>-->
+                            <!--<li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>-->
+                            <!--<li><span>多云</span></li><br>-->
+                            <!--<li><span>南风</span></li><br>-->
+                            <!--<li><span>良</span></li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
+                    <!--<li style="float: left">-->
+                        <!--<ul>-->
+                            <!--<li><span>明天</span></li>-->
+                            <!--<li><span>09/13</span></li>-->
+                            <!--<li><span>27℃</span></li><br>-->
+                            <!--<li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>-->
+                            <!--<li><span>多云</span></li><br>-->
+                            <!--<li><span>南风</span></li><br>-->
+                            <!--<li><span>良</span></li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
+                    <!--<li style="float: left">-->
+                        <!--<ul>-->
+                            <!--<li><span>周六</span></li>-->
+                            <!--<li><span>09/14</span></li>-->
+                            <!--<li><span>27℃</span></li><br>-->
+                            <!--<li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>-->
+                            <!--<li><span>多云</span></li><br>-->
+                            <!--<li><span>南风</span></li><br>-->
+                            <!--<li><span>良</span></li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
+                    <!--<li style="float: left">-->
+                        <!--<ul>-->
+                            <!--<li><span>周日</span></li>-->
+                            <!--<li><span>09/15</span></li>-->
+                            <!--<li><span>27℃</span></li><br>-->
+                            <!--<li><img src="weather_icon/g2/40x40/day/00.png" alt=""></li>-->
+                            <!--<li><span>多云</span></li><br>-->
+                            <!--<li><span>南风</span></li><br>-->
+                            <!--<li><span>良</span></li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
                 </ul>
             </div>
         </div>
         <div class="center">
             <div id="weather"></div>
-            <div id="data"></div>
+            <!--<div id="data"></div>-->
         </div>
     </div>
 
     <script type="text/javascript">
         var province=null,city=null;
         cookie = document.cookie;
+        var urbanAirQuality;
+        var flag = true;
+        //为data准备的数据
+        var arr2=new Array();
+        var xData=new Array();
         window.onload = function() {
             var geolocation = new BMap.Geolocation();
             //判断浏览器是否有缓存，如果有的话，直接从缓存中拿
@@ -168,18 +202,18 @@
                 position = cookie.split("=")[1].split(",");
                 province = position[0].substr(0,2);
                 city = position[1].trim().substr(0,2);
-            }else{
-                geolocation.getCurrentPosition(function(r) {
+            }else {
+                geolocation.getCurrentPosition(function (r) {
                     if (this.getStatus() == BMAP_STATUS_SUCCESS) {
                         var mk = new BMap.Marker(r.point);
                         // 将经纬度进行转换
                         var gc = new BMap.Geocoder();
-                        gc.getLocation(r.point, function(rs) {
+                        gc.getLocation(r.point, function (rs) {
                             var addComp = rs.addressComponents;
                             var pos = addComp.province + ", " + addComp.city + ", " + addComp.district;
-                            document.cookie="pos="+pos;
-                            province = addComp.province.substr(0,2);
-                            city = addComp.city.substr(0,2);
+                            document.cookie = "pos=" + pos;
+                            province = addComp.province.substr(0, 2);
+                            city = addComp.city.substr(0, 2);
                             document.getElementById("pos").innerHTML = addComp.province + ", " + addComp.city + ", " + addComp.district;
                         });
                     } else {
@@ -187,7 +221,18 @@
                     }
                 });
             }
-//            getUrbanAirQuality();
+            $("#pos").click(function () {
+                if(flag){
+                    $("#weather_forest").show();
+                    flag = false;
+                }else{
+                    $("#weather_forest").hide();
+                    flag = true;
+                }
+
+
+            });
+            getUrbanAirQuality();
 //            getWeather();
             weather_forest();
 //
@@ -204,6 +249,7 @@
                 success: function(data) {
                     var $data =  $("#data");
                     var result = data.result;
+                    urbanAirQuality = data.result;
                     console.log(result);
                     var citynow = result[0].citynow;
                     $data.append("<p>citynow</p>")
@@ -315,15 +361,106 @@
                     var sk = result['sk'];
                     var today = result['today'];
                     var future = result['future'];
-                    console.log(today);
+                    console.log(sk);
+                    $("#sk").append("<p style='font-size: 80px'>"+sk.time+"</p>");
+                    $("#sk").append("<p>温度："+sk.temp+"℃&nbsp;&nbsp;&nbsp;湿度："+sk.humidity+"</p>");
+                    $("#sk").append("<p>"+sk.wind_direction+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+sk.wind_strength+"</p>");
+                    $("#sk").append("<p>空气指数："+urbanAirQuality[0].citynow.AQI+"&nbsp;&nbsp;"+urbanAirQuality[0].citynow.quality+"</p>");
+
+                    var weather_data = {
+                        "date":"",
+                        "temperature":"",
+                        "weather_id":{},
+                        "weather":"",
+                        "week":"",
+                        "wind":"",
+
+                    };
+                    for(var i=0;i<5;i++)
+                    {
+                        var _class = "down_ul_li_"+i;
+                        $(".down_ul").append("<li class="+_class+" style='float: left'>");
+                        var _ul_class = "item_ui_"+i;
+                        $("."+_class).append("<ul class="+_ul_class+">");
+                        item_data = future[i];
+                        $("."+_ul_class).append("<li><span>"+item_data.week+"</span></li>");
+                        $("."+_ul_class).append("<li><span>"+item_data.temperature+"</span></li>");
+//                        <img src="weather_icon/g2/40x40/day/00.png" alt=""> <span>"+item_data.weather_id.fa+"</span>
+                        img_url = "weather_icon/g2/40x40/day/"+item_data.weather_id.fa+".png";
+                        $("."+_ul_class).append("<li><img src="+img_url+" alt=''></li>");
+                        $("."+_ul_class).append("<li><span>"+item_data.date+"</span></li>");
+                        $("."+_ul_class).append("<li><span>"+item_data.wind+"</span></li>");
+                        arr2[i] = item_data.temperature.split('℃')[0];
+                        xData[i] = item_data.week;
+                    }
+                    console.log(arr2);
+                    console.log(xData);
+                    draw();
                 },
                 error:function(error){
                     console.log(error);
                 }
 
             });
-        }
+        };
+        function draw() {
+
+            //用于存放图表上的数据
+            var lineChartData = {
+//表的X轴参数
+                labels : xData,
+                datasets : [
+                    {
+                        label: '温度',
+                        fillColor : "transparent",
+                        strokeColor : "rgba(151,187,205,1)",
+                        pointColor : "rgba(151,187,205,1)",
+                        pointStrokeColor : "#fff",
+                        data : []    //data中的参数，通过下方for循环，获取arr2中的数据
+                    }
+                ]
+            }
+
+            for(var i = 0; i < arr2.length;i++)
+            {
+                lineChartData.datasets[0].data.push(arr2[i]);//将数组arr2中的值写入data
+            }
+
+            //定义图表的参数
+            var defaults = {
+                scaleStartValue :"0",     // Y 轴的起始值
+                scaleLineColor : "rgba(0,0,0,.5)",    // Y/X轴的颜色
+                scaleLineWidth : 1,        // X,Y轴的宽度
+                scaleShowLabels : true,    // 刻度是否显示标签, 即Y轴上是否显示文字
+                scaleLabel : "<%=value%>", // Y轴上的刻度,即文字
+                scaleFontFamily : "'Arial'",  // 字体
+                scaleFontSize : 20,        // 文字大小
+                scaleFontStyle : "normal",  // 文字样式
+                scaleFontColor : "#666",    // 文字颜色
+                scaleShowGridLines : true,   // 是否显示网格
+                scaleGridLineColor : "rgba(0,0,0,.05)",   // 网格颜色
+                scaleGridLineWidth : 2,      // 网格宽度
+                bezierCurve : false,         // 是否使用贝塞尔曲线? 即:线条是否弯曲
+                pointDot : true,             // 是否显示点数
+                pointDotRadius : 8,          // 圆点的大小
+                pointDotStrokeWidth : 1,     // 圆点的笔触宽度, 即:圆点外层边框大小
+                datasetStroke : true,        // 数据集行程
+                datasetStrokeWidth : 2,      // 线条的宽度, 即:数据集
+                datasetFill : false,         // 是否填充数据集
+                animation : true,            // 是否执行动画
+                animationSteps : 60,          // 动画的时间
+                animationEasing : "easeOutQuart",    // 动画的特效
+                onAnimationComplete : null    // 动画完成时的执行函数
+            }
+
+            var ctx = document.getElementById("myChart").getContext("2d");
+            window.myLine = new Chart(ctx, {
+                type:'line',
+                data: lineChartData
+            });
+    }
     </script>
+
 
 </body>
 
