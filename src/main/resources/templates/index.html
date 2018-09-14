@@ -30,7 +30,7 @@
 
         #sk{
             float: left;
-            margin-left: 8%;
+            margin-left: 3%;
         }
         #sk p{
             color: white;
@@ -39,7 +39,8 @@
         #weather_forest{
             width:499px;
             height:393px;
-            margin:0 auto;
+            float: left;
+            margin-left: 10px;
         }
         #weather_forest .up{
             width: 496px;
@@ -65,7 +66,7 @@
             font-weight: bold;
         }
         #weather_forest .down ul{
-            padding-top: 10px;
+            padding-top: 8px;
             margin-left: -35px;
         }
         #weather_forest .down ul li{
@@ -188,7 +189,7 @@
     <script type="text/javascript">
         var province=null,city=null;
         cookie = document.cookie;
-        var urbanAirQuality;
+        var urbanAirQuality = new Array();
         var flag = true;
         //为data准备的数据
         var arr2=new Array();
@@ -234,7 +235,7 @@
             });
             getUrbanAirQuality();
 //            getWeather();
-            weather_forest();
+
 //
         };
         function getUrbanAirQuality(){
@@ -250,7 +251,6 @@
                     var $data =  $("#data");
                     var result = data.result;
                     urbanAirQuality = data.result;
-                    console.log(result);
                     var citynow = result[0].citynow;
                     $data.append("<p>citynow</p>")
                     $data.append("<ul>"+"<li>"+citynow.city+"</li>"+"<li>"+citynow.AQI+"</li>"+"<li>"+citynow.quality+"</li>"+"<li>"+citynow.date+"</li>"
@@ -265,6 +265,7 @@
                         $("#lastMoniData").append("<li>"+value.quality+"</li>");
                         $("#lastMoniData").append("<li>"+value.date+"</li>");
                     }
+                    weather_forest();
 //                    $data.append("<p>lastTwoWeeks</p>")
                 },
                 error: function(err) {
@@ -361,7 +362,6 @@
                     var sk = result['sk'];
                     var today = result['today'];
                     var future = result['future'];
-                    console.log(sk);
                     $("#sk").append("<p style='font-size: 80px'>"+sk.time+"</p>");
                     $("#sk").append("<p>温度："+sk.temp+"℃&nbsp;&nbsp;&nbsp;湿度："+sk.humidity+"</p>");
                     $("#sk").append("<p>"+sk.wind_direction+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+sk.wind_strength+"</p>");
@@ -388,7 +388,9 @@
 //                        <img src="weather_icon/g2/40x40/day/00.png" alt=""> <span>"+item_data.weather_id.fa+"</span>
                         img_url = "weather_icon/g2/40x40/day/"+item_data.weather_id.fa+".png";
                         $("."+_ul_class).append("<li><img src="+img_url+" alt=''></li>");
-                        $("."+_ul_class).append("<li><span>"+item_data.date+"</span></li>");
+                        var _date = item_data.date;
+                        var str_date = _date.substr(0,4)+"/"+_date.substr(4,2)+"/"+_date.substr(6,2);
+                        $("."+_ul_class).append("<li><span>"+str_date+"</span></li>");
                         $("."+_ul_class).append("<li><span>"+item_data.wind+"</span></li>");
                         arr2[i] = item_data.temperature.split('℃')[0];
                         xData[i] = item_data.week;
@@ -412,10 +414,31 @@
                 datasets : [
                     {
                         label: '温度',
-                        fillColor : "transparent",
-                        strokeColor : "rgba(151,187,205,1)",
-                        pointColor : "rgba(151,187,205,1)",
-                        pointStrokeColor : "#fff",
+                        fill: false,
+                        lineTension: 0.1,
+                        backgroundColor:["rgba(255, 99, 132, 0.2)",
+                        "rgba(255, 159, 64, 0.2)",
+                        "rgba(255, 205, 86, 0.2)",
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(54, 162, 235, 0.2)",
+                        "rgba(153, 102, 255, 0.2)",
+                        "rgba(201, 203, 207, 0.2)"
+                        ],
+                        borderColor: "rgba(255,240,245,1)",
+                        borderCapStyle: 'butt',
+//                        borderDash: [],
+                        borderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(255,0,255,1)",
+                        pointBackgroundColor: "#fff",
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 1,
+                        pointHitRadius: 10,
+                        pointDot:true,
                         data : []    //data中的参数，通过下方for循环，获取arr2中的数据
                     }
                 ]
@@ -426,33 +449,15 @@
                 lineChartData.datasets[0].data.push(arr2[i]);//将数组arr2中的值写入data
             }
 
-            //定义图表的参数
-            var defaults = {
-                scaleStartValue :"0",     // Y 轴的起始值
-                scaleLineColor : "rgba(0,0,0,.5)",    // Y/X轴的颜色
-                scaleLineWidth : 1,        // X,Y轴的宽度
-                scaleShowLabels : true,    // 刻度是否显示标签, 即Y轴上是否显示文字
-                scaleLabel : "<%=value%>", // Y轴上的刻度,即文字
-                scaleFontFamily : "'Arial'",  // 字体
-                scaleFontSize : 20,        // 文字大小
-                scaleFontStyle : "normal",  // 文字样式
-                scaleFontColor : "#666",    // 文字颜色
-                scaleShowGridLines : true,   // 是否显示网格
-                scaleGridLineColor : "rgba(0,0,0,.05)",   // 网格颜色
-                scaleGridLineWidth : 2,      // 网格宽度
-                bezierCurve : false,         // 是否使用贝塞尔曲线? 即:线条是否弯曲
-                pointDot : true,             // 是否显示点数
-                pointDotRadius : 8,          // 圆点的大小
-                pointDotStrokeWidth : 1,     // 圆点的笔触宽度, 即:圆点外层边框大小
-                datasetStroke : true,        // 数据集行程
-                datasetStrokeWidth : 2,      // 线条的宽度, 即:数据集
-                datasetFill : false,         // 是否填充数据集
-                animation : true,            // 是否执行动画
-                animationSteps : 60,          // 动画的时间
-                animationEasing : "easeOutQuart",    // 动画的特效
-                onAnimationComplete : null    // 动画完成时的执行函数
-            }
-
+            /**
+             *
+             * Chart.js库具有四个特殊的全局键，可用于更改图表中的所有字体。
+             * 这些键是  defaultFontFamily,  defaultFontSize,  defaultFontStyle，和  defaultFontColor
+             * @type {CanvasRenderingContext2D|WebGLRenderingContext}
+             */
+            Chart.defaults.global.defaultFontFamily = "Lato";
+            Chart.defaults.global.defaultFontSize = 18;
+            Chart.defaults.global.defaultFontColor = 'orange';
             var ctx = document.getElementById("myChart").getContext("2d");
             window.myLine = new Chart(ctx, {
                 type:'line',

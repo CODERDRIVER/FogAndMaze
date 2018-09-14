@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description
+ * @Description 用来进行http请求相应接口数据的工具类
  * @Author: liuXuyang
  * @studentNo 15130110024
  * @Emailaddress 1187697635@qq.com
