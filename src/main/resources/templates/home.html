@@ -32,13 +32,9 @@
             float: left;
             margin-left: 3%;
         }
-        #myCanvas{
-            float: left;
-            /*margin-left: 3%;*/
-        }
         #sk p{
             color: white;
-            line-height: 20px;
+            line-height: 10px;
         }
         #weather_forest{
             width:499px;
@@ -117,7 +113,7 @@
         },-->
         <div id="sk">
         </div>
-        <div id="myCanvas">
+        <div style="float:right;margin-right:50px;width: 350px;height: 500px">
             <canvas id="myChart" width="350px" height="450px"></canvas>
         </div>
         <div id="weather_forest" style="display: none">
@@ -191,11 +187,10 @@
     </div>
 
     <script type="text/javascript">
-        var province="";
-        city="";
+        var province=null,city=null;
         cookie = document.cookie;
-        var baseUrl = "http://119.23.75.180:8080";
-//        var baseUrl = "http://localhost:8080";
+//        var baseUrl = "http://119.23.75.180:8080";
+        var baseUrl = "http://localhost:8080";
         var urbanAirQuality = new Array();
         var flag = true;
         //为data准备的数据
@@ -216,8 +211,6 @@
                 position = cookie.split("=")[1].split(",");
                 province = position[0].substr(0,2);
                 city = position[1].trim().substr(0,2);
-                getUrbanAirQuality(city);
-                getWeather(province,city)
             }else {
                 geolocation.getCurrentPosition(function (r) {
                     if (this.getStatus() == BMAP_STATUS_SUCCESS) {
@@ -231,12 +224,7 @@
                             province = addComp.province.substr(0, 2);
                             city = addComp.city.substr(0, 2);
                             document.getElementById("pos").innerHTML = addComp.province + ", " + addComp.city + ", " + addComp.district;
-                            console.log(city);
-                            getUrbanAirQuality(city);
-                            getWeather(province,city);
                         });
-//                        console.log(city);
-//                        getUrbanAirQuality();
                     } else {
                         alert('failed' + this.getStatus());
                     }
@@ -253,12 +241,12 @@
 
 
             });
-//            getUrbanAirQuality();
+            getUrbanAirQuality();
 //            getWeather();
 
 //
         };
-        function getUrbanAirQuality(city){
+        function getUrbanAirQuality(){
             //            请求空气质量信息
             $.ajax({
                 type: "GET",
@@ -293,7 +281,7 @@
                 }
             });
         };
-        function getWeather(province,city)
+        function getWeather()
         {
            // 获得当前日期
             var date = new Date().toLocaleDateString();
@@ -345,6 +333,13 @@
                         "error_code": 0
 }
                      */
+                    result = data.result;
+                    $("#weather").append("<ul>");
+                    for(key in result)
+                    {
+                        $("#weather").append("<li>"+key+" : "+result[key]+"</li>")
+                    }
+                    $("#weather").append("</ul>");
                 },
                 error:function(error){
                     console.log(error);
@@ -363,7 +358,6 @@
          "error_code": 0
          */
         function weather_forest(){
-            console.log(city);
             $.ajax({
                 url:baseUrl+"/weather/city",
                 type:"GET",
@@ -387,7 +381,6 @@
                     $("#sk").append("<p>"+sk.wind_direction+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+sk.wind_strength+"</p>");
                     $("#sk").append("<p>空气指数："+urbanAirQuality[0].citynow.AQI+"&nbsp;&nbsp;"+urbanAirQuality[0].citynow.quality+"</p>");
                     $("#sk").append("<p style='color: #FFFF00;width: 200px;'>"+today.dressing_advice+"</p>");
-
                     var weather_data = {
                         "date":"",
                         "temperature":"",

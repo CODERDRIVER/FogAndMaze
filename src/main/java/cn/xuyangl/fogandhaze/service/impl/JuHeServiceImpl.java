@@ -24,11 +24,13 @@ public class JuHeServiceImpl implements JuHeService {
 
 
     //申请的key
-    public static final String QUALITY_KEY = "7855dc98293af090c0bd432ebde99294";
+//    public static final String QUALITY_KEY = "7855dc98293af090c0bd432ebde99294";
+    public static final String QUALITY_KEY = "37d7a7fe8149abbfe3ce6ae31c1925c6";
 
     //天气情况质量
     public static final String WEATHER_KEY = "a9b9234b8989dec225425d5964425f08";
 
+    //天气预报
     public static final String WEATHER_FOREST = "19b73e5deff2c52c13be90450c5cddbe";
 
     /**
